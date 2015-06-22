@@ -1,0 +1,40 @@
+#compdef fastboot
+
+_fastboot()
+{
+  local state line curcontext="$curcontext"
+  typeset -A opt_args
+
+  _arguments \
+    '1: :->fastboot_cmd' \
+    '*: :->args'
+   
+  case "$state" in
+    (fastboot_cmd)
+      _arguments \
+      '1:cmd:(reboot boot flash devices -w reboot-bootloader)'
+    ;;
+    (args)
+      case $words[2] in
+        (reboot|devices|-w|reboot-bootloader)
+        ;;
+        (flash)
+          _arguments \
+            '2:partition:(boot misc kernel resource recovery system)' \
+            '3: :images_files -/'
+        ;;
+        (*)
+          _message "1:$words[1],2:$words[2]"
+        ;;
+      esac
+    ;;
+  esac
+}
+
+(( $+functions[images_files] )) ||
+images_files() {
+  _wanted files expl 'image' _files -g "$words[3].img(-.)"
+  return 1
+}
+
+_fastboot "$@"
