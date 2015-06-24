@@ -103,6 +103,7 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias less='less -i'
 
 bindkey '^R' history-incremental-search-backward
 bindkey '^U' backward-kill-line
