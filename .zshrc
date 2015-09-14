@@ -11,7 +11,7 @@ ZSH_THEME="ds"
 # CASE_SENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -45,18 +45,13 @@ ENABLE_CORRECTION="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-completions colored-man extract history-substring-search autojump vi-mode)
+plugins=(zsh-completions colored-man extract history-substring-search \
+    autojump vi-mode)
 
 # User configuration
 
-#export PATH="/home/tusson/bin:/home/tusson/bin/jdk1.6.0_45/bin:/home/tusson/bin/jdk1.6.0_45/jre/bin:/home/tusson/bin/:/home/tusson/bin/jdk1.6.0_45/bin:/home/tusson/bin/jdk1.6.0_45/jre/bin:/home/tusson/bin/:/home/tusson/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 # export MANPATH="/usr/local/man:$MANPATH"
 
-export PATH=/home/$LOGNAME/bin/:$PATH
-export JAVA_HOME=~/bin/jdk1.6.0_45
-export JRE_HOME=$JAVA_HOME/jre
-export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
-export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 
 source $ZSH/oh-my-zsh.sh
 
@@ -105,13 +100,19 @@ alias la='ls -A'
 alias l='ls -CF'
 alias less='less -i'
 
-bindkey '^R' history-incremental-search-backward
+bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^U' backward-kill-line
+bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
-bindkey '^N' expand-or-complete-prefix
-bindkey '^P' reverse-menu-complete
-bindkey '^K' history-substring-search-up
-bindkey '^J' history-substring-search-down
+bindkey -M menuselect '^K' up-line-or-history
+bindkey -M menuselect '^J' down-line-or-history
+bindkey -M menuselect '^H' vi-backward-char
+bindkey -M menuselect '^L' vi-forward-char
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+bindkey -a '^P' history-substring-search-up
+bindkey -a '^N' history-substring-search-down
+bindkey '^o' insert-last-word
 
 # bind UP and DOWN arrow keys
 zmodload zsh/terminfo
@@ -119,3 +120,26 @@ bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
 autoload -U compinit && compinit
+
+function getAndroidTop
+{
+    local TOPFILE=build/core/envsetup.mk
+    local T=$PWD
+    while [ \( ! \( -f "$T/$TOPFILE" \) \) -a \( $T != "/" \) ]; do
+        T=`dirname $T`
+    done
+    if [ -f "$T/$TOPFILE" ]; then
+       echo $T
+    fi
+}
+
+alias ja='cd $(getAndroidTop)'
+alias alog='logcat-color'
+alias alogt='logcat-color -v time'
+alias ash='adb shell'
+alias akmsg='adb shell cat /proc/kmsg'
+alias admesg='adb shell dmesg'
+alias aroot='adb wait-for-device && adb root'
+alias aremount='adb wait-for-device && adb root && sleep 0.1 && adb wait-for-device && adb remount'
+
+source ~/.workrc
