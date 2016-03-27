@@ -121,25 +121,5 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 
 autoload -U compinit && compinit
 
-function getAndroidTop
-{
-    local TOPFILE=build/core/envsetup.mk
-    local T=$PWD
-    while [ \( ! \( -f "$T/$TOPFILE" \) \) -a \( $T != "/" \) ]; do
-        T=`dirname $T`
-    done
-    if [ -f "$T/$TOPFILE" ]; then
-       echo $T
-    fi
-}
+[[ -s ~/.workrc ]] && source ~/.workrc
 
-alias ja='cd $(getAndroidTop)'
-alias alog='logcat-color'
-alias alogt='logcat-color -v time'
-alias ash='adb shell'
-alias akmsg='adb shell cat /proc/kmsg'
-alias admesg='adb shell dmesg'
-alias aroot='adb wait-for-device && adb root'
-alias aremount='adb wait-for-device && adb root && sleep 0.1 && adb wait-for-device && adb remount'
-
-source ~/.workrc
