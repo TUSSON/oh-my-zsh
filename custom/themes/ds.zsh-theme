@@ -42,6 +42,39 @@ prompt_dir() {
   prompt_segment NONE blue ' %~'
 }
 
+my_git_prompt() {
+  tester=$(git rev-parse --git-dir 2> /dev/null) || return
+  
+  INDEX=$(git status --porcelain 2> /dev/null)
+  STATUS=""
+
+  # is anything staged?
+  if $(echo "$INDEX" | command grep -E -e '^(D[ M]|[MARC][ MD]) ' &> /dev/null); then
+      if $(echo "$INDEX" | command grep -E -e '^[ MARC][MD] ' &> /dev/null); then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED_UNSTAGED"
+      else
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED"
+      fi
+  else 
+      # is anything unstaged?
+      if $(echo "$INDEX" | command grep -E -e '^[ MARC][MD] ' &> /dev/null); then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNSTAGED"
+      else
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_NORMAL"
+      fi
+  fi
+
+  if [[ -n $STATUS ]]; then
+    STATUS=" $STATUS"
+  fi
+
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX$(my_current_branch)$STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX"
+}
+
+function my_current_branch() {
+  echo $(current_branch || echo "(no branch)")
+}
+
 # End the prompt, closing any open segments
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
@@ -109,7 +142,16 @@ PROMPT='$FG[237]------------------------------------------------------------%{$r
 $(prompt_status)\
 $(prompt_mode)\
 $(prompt_dir)\
+$(my_git_prompt)\
 $(prompt_end)'
 
 PROMPT2=' '
 RPS1=' '
+#%{$reset_color%}$(my_git_prompt)'
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}[%{$fg[blue]%}"
+ZSH_THEME_GIT_PROMPT_NORMAL="%{$fg[blue]%}✔"
+ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}✘"
+ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg[red]%}✘"
+ZSH_THEME_GIT_PROMPT_STAGED_UNSTAGED="%{$fg[yellow]%}✘"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[yellow]%}]%{$reset_color%}"

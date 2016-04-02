@@ -46,7 +46,7 @@ ENABLE_CORRECTION="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(zsh-completions colored-man extract history-substring-search \
-    autojump vi-mode)
+    autojump vi-mode git)
 
 # User configuration
 
