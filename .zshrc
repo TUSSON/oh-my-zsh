@@ -46,7 +46,7 @@ ENABLE_CORRECTION="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(zsh-completions colored-man extract history-substring-search \
-    autojump vi-mode git)
+    autojump vi-mode)
 
 # User configuration
 
@@ -119,7 +119,6 @@ zmodload zsh/terminfo
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
-autoload -U compinit && compinit
+#autoload -U compinit && compinit
 
 [[ -s ~/.workrc ]] && source ~/.workrc
-
