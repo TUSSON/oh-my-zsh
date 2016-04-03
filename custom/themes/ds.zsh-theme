@@ -1,10 +1,10 @@
 # af-magic.zsh-theme
 # Repo: https://github.com/andyfleming/oh-my-zsh
 # Direct Link: https://github.com/andyfleming/oh-my-zsh/blob/master/themes/af-magic.zsh-theme
-INSCOL=yellow
+INSCOL=blue
 
 # NORMAL mode color
-NORMCOL=cyan
+NORMCOL=yellow
 
 # REPLACE mode color
 REPCOL=red
@@ -32,14 +32,14 @@ prompt_segment() {
 # - am I root
 # - are there background jobs?
 prompt_status() {
-  [[ $? -ne 0 ]] && prompt_segment NONE default "%{%F{red}%}x"
+  [[ $? -ne 0 ]] && prompt_segment NONE default "%{%F{red}%}✗"
   [[ $UID -eq 0 ]] && prompt_segment NONE default "%{%F{yellow}%}!"
   [[ $(jobs -l | wc -l) -gt 0 ]] && prompt_segment NONE default "%{%F{cyan}%}&"
 }
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment NONE blue ' %~'
+  prompt_segment NONE blue '%~'
 }
 
 my_git_prompt() {
@@ -98,15 +98,15 @@ set_vi_mode() {
     case "$1" in
         "i")
             indcol=$INSCOL
-            zsh_vi_mode="+"
+            zsh_vi_mode="»"
             ;;
         "n")
             indcol=$NORMCOL
-            zsh_vi_mode=":"
+            zsh_vi_mode="«"
             ;;
         "r")
             indcol=$REPCOL
-            zsh_vi_mode="r"
+            zsh_vi_mode="»"
             ;;
     esac
     vim_mode="%{%F{$indcol}%}"
@@ -147,9 +147,9 @@ set_vi_mode "i"
 # primary prompt
 PROMPT='$FG[237]------------------------------------------------------------%{$reset_color%}
 $(prompt_status)\
-$(prompt_mode)\
 $(prompt_dir)\
 $(my_git_prompt)\
+$(prompt_mode)\
 $(prompt_end)'
 
 PROMPT2=' '
@@ -157,8 +157,8 @@ RPS1=' '
 #%{$reset_color%}$(my_git_prompt)'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}[%{$fg[blue]%}"
-ZSH_THEME_GIT_PROMPT_NORMAL="%{$fg[blue]%}✔"
-ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}✘"
-ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg[red]%}✘"
-ZSH_THEME_GIT_PROMPT_STAGED_UNSTAGED="%{$fg[yellow]%}✘"
+ZSH_THEME_GIT_PROMPT_NORMAL="%{$fg[blue]%}✓"
+ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}✗"
+ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg[red]%}✗"
+ZSH_THEME_GIT_PROMPT_STAGED_UNSTAGED="%{$fg[yellow]%}✗"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[yellow]%}]%{$reset_color%}"
