@@ -23,7 +23,7 @@ DISABLE_AUTO_UPDATE="true"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+#ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -46,11 +46,13 @@ ENABLE_CORRECTION="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(zsh-completions colored-man extract history-substring-search \
-    autojump vi-mode)
+    autojump vi-mode zsh-autosuggestions)
 
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
+
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 
 source $ZSH/oh-my-zsh.sh
@@ -95,7 +97,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases
-alias ll='ls -alF'
+alias ll='ls -alhF'
 alias la='ls -A'
 alias l='ls -CF'
 alias less='less -i'
@@ -104,15 +106,16 @@ bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^U' backward-kill-line
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
-bindkey -M menuselect '^K' up-line-or-history
-bindkey -M menuselect '^J' down-line-or-history
-bindkey -M menuselect '^H' vi-backward-char
-bindkey -M menuselect '^L' vi-forward-char
+#bindkey -M menuselect '^K' up-line-or-history
+#bindkey -M menuselect '^J' down-line-or-history
+#bindkey -M menuselect '^H' vi-backward-char
+#bindkey -M menuselect '^L' vi-forward-char
 bindkey '^P' history-substring-search-up
 bindkey '^N' history-substring-search-down
 bindkey -a '^P' history-substring-search-up
 bindkey -a '^N' history-substring-search-down
 bindkey '^o' insert-last-word
+bindkey '^j' autosuggest-execute
 
 # bind UP and DOWN arrow keys
 zmodload zsh/terminfo
@@ -122,3 +125,5 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 #autoload -U compinit && compinit
 
 [[ -s ~/.workrc ]] && source ~/.workrc
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
